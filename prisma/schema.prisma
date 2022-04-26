@@ -1,0 +1,22 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["cockroachdb"]
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model Card {
+  id             String @id(map: "primary") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName      String @map("first_name")
+  lastName       String @map("last_name")
+  githubUsername String @map("github_username")
+  shirtSize      String @map("shirt_size")
+
+  @@map("cards")
+}

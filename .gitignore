@@ -1,0 +1,8 @@
+node_modules
+
+/.cache
+/public/build
+/.netlify
+.env
+
+cockroach-v21.2.9.darwin-10.9-amd64/
