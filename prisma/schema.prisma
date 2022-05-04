@@ -20,3 +20,14 @@ model Card {
 
   @@map("cards")
 }
+
+model Scan {
+  id             String @id(map: "primary") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName      String @map("first_name")
+  lastName       String @map("last_name")
+  githubUsername String @map("github_username")
+  shirtSize      String @map("shirt_size")
+  notes          String
+
+  @@map("scans")
+}
