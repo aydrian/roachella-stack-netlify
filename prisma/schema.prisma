@@ -12,22 +12,28 @@ datasource db {
 }
 
 model Card {
-  id             String @id(map: "primary") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  firstName      String @map("first_name")
-  lastName       String @map("last_name")
-  githubUsername String @map("github_username")
-  shirtSize      String @map("shirt_size")
+  id             String   @id(map: "primary") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName      String   @map("first_name")
+  lastName       String   @map("last_name")
+  githubUsername String   @map("github_username")
+  twitter        String?
+  shirtSize      String   @map("shirt_size")
+  qrCode         String   @map("qr_code")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("cards")
 }
 
-model Scan {
-  id             String @id(map: "primary") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  firstName      String @map("first_name")
-  lastName       String @map("last_name")
-  githubUsername String @map("github_username")
-  shirtSize      String @map("shirt_size")
+model Contact {
+  id             String   @id(map: "primary") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName      String   @map("first_name")
+  lastName       String   @map("last_name")
+  githubUsername String   @map("github_username")
+  twitter        String?
+  shirtSize      String   @map("shirt_size")
   notes          String
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  @@map("scans")
+  @@map("contacts")
 }

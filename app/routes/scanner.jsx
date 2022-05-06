@@ -1,4 +1,4 @@
-import { Form, useActionData } from "@remix-run/react";
+import { Form, Link, useActionData } from "@remix-run/react";
 import { QrReader } from "react-qr-reader";
 import { db } from "~/utils/db.server";
 
@@ -11,11 +11,11 @@ export const action = async ({ request }) => {
   const shirtSize = form.get("shirtSize");
   const notes = form.get("notes");
 
-  const scan = await db.scan.create({
+  const contact = await db.contact.create({
     data: { firstName, lastName, githubUsername, shirtSize, notes }
   });
 
-  return { lastScan: scan };
+  return { lastScan: contact };
 };
 
 export default function ScannerRoute() {
@@ -24,6 +24,8 @@ export default function ScannerRoute() {
   return (
     <div>
       <h1>Hello Scanner</h1>
+
+      <Link to="/">Go back</Link>
       {actionData?.lastScan && <div>Last Scan: {actionData?.lastScan.id}</div>}
       {data ? (
         <>
@@ -61,7 +63,7 @@ export default function ScannerRoute() {
             if (!!result) {
               try {
                 const qrData = JSON.parse(result?.text);
-                if (qrData?.app !== "roacher-stack") {
+                if (qrData?.app !== "roachella-stack") {
                   throw new Error("QR Code not supported.");
                 }
                 setData(qrData);

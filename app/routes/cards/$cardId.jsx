@@ -1,30 +1,26 @@
 import { useLoaderData } from "@remix-run/react";
-import QRCode from "qrcode";
 import { db } from "~/utils/db.server";
 
 export const loader = async ({ params }) => {
-  const { id, ...rest } = await db.card.findUnique({
+  const card = await db.card.findUnique({
     where: { id: params.cardId }
   });
 
-  const qrCode = await QRCode.toDataURL(
-    JSON.stringify({ ...rest, app: "roacher-stack" })
-  );
-
-  return { card: { id, ...rest, qrCode } };
+  return { card };
 };
 
 export default function CardIdRoute() {
   const { card } = useLoaderData();
-  console.log(card);
   return (
     <div>
       <p>
         {card.firstName} {card.lastName}
         <br />
-        {card.githubUsername}
+        GitHub: {card.githubUsername}
         <br />
-        {card.shirtSize}
+        Twitter: {card.twitter}
+        <br />
+        T-Shirt Size: {card.shirtSize}
       </p>
       <img src={card.qrCode} alt="qr code" />
     </div>
