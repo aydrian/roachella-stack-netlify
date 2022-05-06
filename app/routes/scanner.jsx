@@ -1,4 +1,4 @@
-import { Form, Link, useActionData } from "@remix-run/react";
+import { Form, Link, useActionData, useTransition } from "@remix-run/react";
 import { QrReader } from "react-qr-reader";
 import { db } from "~/utils/db.server";
 
@@ -20,13 +20,31 @@ export const action = async ({ request }) => {
 
 export default function ScannerRoute() {
   const actionData = useActionData();
+  const transition = useTransition();
   const [data, setData] = React.useState();
+  const isSaving =
+    transition.state === "submitting" &&
+    transition.submission.formData.get("_action") === "save";
+
+  React.useEffect(() => {
+    if (!isSaving) {
+      setData(null);
+    }
+  }, [isSaving]);
+
   return (
     <div>
       <h1>Hello Scanner</h1>
 
       <Link to="/">Go back</Link>
-      {actionData?.lastScan && <div>Last Scan: {actionData?.lastScan.id}</div>}
+      {actionData?.lastScan && (
+        <div>
+          Last Scan:{" "}
+          <Link to={`/contacts/${actionData?.lastScan.id}`}>
+            {actionData?.lastScan.firstName} {actionData?.lastScan.lastName}
+          </Link>
+        </div>
+      )}
       {data ? (
         <>
           <Form method="POST" replace>
@@ -41,9 +59,11 @@ export default function ScannerRoute() {
             <p>
               {data.firstName} {data.lastName}
               <br />
-              {data.githubUsername}
+              GitHub: {data.githubUsername}
               <br />
-              {data.shirtSize}
+              Twitter: {data.twitter}
+              <br />
+              T-Shirt Size: {data.shirtSize}
             </p>
             <label>
               Notes:

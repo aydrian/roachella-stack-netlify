@@ -9,7 +9,7 @@ export const loader = async ({ params }) => {
   return { contact };
 };
 
-export default function CardIdRoute() {
+export default function ContactIdRoute() {
   const { contact } = useLoaderData();
   console.log(contact);
   return (
