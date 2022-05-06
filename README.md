@@ -1,4 +1,6 @@
-# Welcome to Remix!
+# Roachella Stack
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/4fbde27d-d6fb-4c9f-a30f-79f464f60214/deploy-status)](https://app.netlify.com/sites/roachella-stack/deploys)
 
 - [Remix Docs](https://remix.run/docs)
 
