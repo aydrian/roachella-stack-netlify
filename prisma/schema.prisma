@@ -1,9 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["cockroachdb"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -16,11 +12,11 @@ model Card {
   firstName      String   @map("first_name")
   lastName       String   @map("last_name")
   githubUsername String   @map("github_username")
-  twitter        String?
   shirtSize      String   @map("shirt_size")
-  qrCode         String   @map("qr_code")
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  twitter        String?
   updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  qrCode         String   @map("qr_code")
 
   @@map("cards")
 }
