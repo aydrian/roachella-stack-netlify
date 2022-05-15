@@ -1,5 +1,7 @@
 node_modules
 
+notes.md
+
 /.cache
 /public/build
 /.netlify
