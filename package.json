@@ -5,9 +5,11 @@
   "license": "",
   "sideEffects": false,
   "scripts": {
-    "build": "prisma generate && remix build",
-    "dev": "cross-env NODE_ENV=development netlify dev",
-    "start": "cross-env NODE_ENV=production netlify dev"
+    "build": "npm run build:css && prisma generate && remix build",
+    "start": "cross-env NODE_ENV=production netlify dev",
+    "build:css": "tailwindcss -m -i ./styles/app.css -o app/styles/app.css",
+    "dev": "concurrently \"npm run dev:css\" \"cross-env NODE_ENV=development netlify dev\"",
+    "dev:css": "tailwindcss -w -i ./styles/app.css -o app/styles/app.css"
   },
   "dependencies": {
     "@netlify/functions": "^0.10.0",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@remix-run/dev": "^1.4.1",
     "@remix-run/eslint-config": "^1.4.1",
+    "@remix-run/serve": "^1.4.3",
     "autoprefixer": "^10.4.7",
     "concurrently": "^7.1.0",
     "eslint": "^8.11.0",
