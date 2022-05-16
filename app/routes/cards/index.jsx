@@ -26,4 +26,4 @@ export default function CardsIndexRoute() {
       </ul>
     </div>
   );
-}
+};
