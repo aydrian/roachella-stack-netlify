@@ -1,11 +1,13 @@
-import { Link, Outlet } from "@remix-run/react";
+import { Outlet } from "@remix-run/react";
+import Layout from "~/components/Layout";
 
 export default function CardsRoute() {
   return (
-    <div>
-      <h1>Cards</h1>
-      <Link to="/">Go back</Link>
-      <Outlet />
-    </div>
+    <Layout>
+      <div>
+        <h1>Cards</h1>
+        <Outlet />
+      </div>
+    </Layout>
   );
 }
