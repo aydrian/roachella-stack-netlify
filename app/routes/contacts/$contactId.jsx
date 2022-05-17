@@ -11,7 +11,7 @@ export const loader = async ({ params }) => {
 
 export default function ContactIdRoute() {
   const { contact } = useLoaderData();
-  console.log(contact);
+
   return (
     <div>
       <p>
