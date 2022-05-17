@@ -1,22 +1,38 @@
 import { Link, useLoaderData } from "@remix-run/react";
+import { Octokit } from "@octokit/core";
 import { db } from "~/utils/db.server";
 
 import Card from "~/components/Card";
 import Layout from "~/components/Layout";
 
 export const loader = async () => {
-  const card = await db.card.findFirst({
+  const myCard = await db.card.findFirst({
     orderBy: {
       createdAt: "desc"
     }
   });
 
-  return { card };
+  if (myCard.githubUsername.length > 0) {
+    const octokit = new Octokit({
+      auth: process.env.GITHUB_ACCESS_TOKEN
+    });
+
+    const { data } = await octokit.request(`/users/${myCard.githubUsername}`);
+
+    return {
+      card: { ...myCard, ...data }
+    }
+  };
+
+  return {
+    card: myCard
+  };
 };
 
 
 export default function Index() {
   const { card } = useLoaderData();
+
   return (
     <Layout>
       {card ? (
