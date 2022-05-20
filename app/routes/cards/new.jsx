@@ -1,7 +1,9 @@
 import { Form } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
-import QRCode from "qrcode";
 import { db } from "~/utils/db.server";
+
+import QRCode from "qrcode";
+import FormInput from '~/components/FormInput';
 
 export const action = async ({ request }) => {
   const form = await request.formData();
@@ -29,15 +31,6 @@ export const action = async ({ request }) => {
 
   return redirect(`/cards/${card.id}`);
 };
-
-function FormInput({ name, label, type, ...props }) {
-  return (
-    <label class="flex flex-col items-start">
-      {label}
-      <input name={name} type={type} class="border mt-2 border-slate-500 rounded-md" />
-    </label>
-  )
-}
 
 export default function CardsNewRoute() {
   return (

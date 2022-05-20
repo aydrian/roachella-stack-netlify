@@ -1,8 +1,11 @@
-import { Form, useActionData, useTransition } from "@remix-run/react";
+import { Form, useSearchParams, useActionData, useTransition, useLoaderData } from "@remix-run/react";
 import { QrReader } from "react-qr-reader";
 import { db } from "~/utils/db.server";
 
+import { Octokit } from "@octokit/core";
+
 import Layout from "~/components/Layout";
+import Card from '~/components/Card';
 
 export const action = async ({ request }) => {
   const form = await request.formData();
@@ -17,13 +20,39 @@ export const action = async ({ request }) => {
     data: { firstName, lastName, githubUsername, shirtSize, notes }
   });
 
+
   return { lastScan: contact };
 };
 
+export async function loader({ request }) {
+  const url = new URL(request.url);
+
+  if (url.searchParams.has("githubUsername")) {
+    const githubUsername = url.searchParams.get("githubUsername");
+
+    const octokit = new Octokit();
+
+    const { data } = await octokit.request(`/users/${githubUsername}`);
+
+    return {
+      contact: data
+    }
+  }
+
+  return {}
+}
+
+
 export default function ScannerRoute() {
+  const [, setSearchParams] = useSearchParams();
+
+  const { contact } = useLoaderData()
   const actionData = useActionData();
   const transition = useTransition();
   const [data, setData] = React.useState();
+
+  console.log(contact)
+
   const isSaving =
     transition.state === "submitting" &&
     transition.submission.formData.get("_action") === "save";
@@ -36,8 +65,8 @@ export default function ScannerRoute() {
 
   return (
     <Layout>
-      <div>
-        <h1>Hello Scanner</h1>
+      <div className="flex flex-col items-center">
+        <h1 className="text-xl">Scanner</h1>
         {data ? (
           <>
             <Form method="POST" replace>
@@ -49,23 +78,15 @@ export default function ScannerRoute() {
                 value={data.githubUsername}
               />
               <input type="hidden" name="shirtSize" value={data.shirtSize} />
-              <p>
-                {data.firstName} {data.lastName}
-                <br />
-                GitHub: {data.githubUsername}
-                <br />
-                Twitter: {data.twitter}
-                <br />
-                T-Shirt Size: {data.shirtSize}
-              </p>
+              {contact && <Card person={{ ...data, ...contact }} />}
               <label>
                 Notes:
-                <textarea name="notes"></textarea>
+                <textarea className="border-1 border-black rounded-md" name="notes"></textarea>
               </label>
-              <button type="submit" name="_action" value="save">
+              <button className="rounded-lg bg-blue-400 text-white p-3 mx-2" type="submit" name="_action" value="save">
                 Save
               </button>
-              <button type="button" onClick={() => setData(null)}>
+              <button className="rounded-lg bg-yellow-400 p-3" type="button" onClick={() => setData(null)}>
                 Scan again
               </button>
             </Form>
@@ -79,6 +100,7 @@ export default function ScannerRoute() {
                   if (qrData?.app !== "roachella-stack") {
                     throw new Error("QR Code not supported.");
                   }
+                  setSearchParams({ githubUsername: qrData.githubUsername });
                   setData(qrData);
                 } catch (err) {
                   console.info(err);
@@ -88,23 +110,13 @@ export default function ScannerRoute() {
                 console.info(error);
               }
             }}
-            style={{ width: "250px" }}
+            className="w-60"
+            videoStyle={{
+              boxShadow: "0 0 10px rgba(0,0,0,0.5)",
+            }}
           />
         )}
       </div>
     </Layout>
   );
-}
-
-// Go back button
-{/* 
-  <Link to="/">Go back</Link>
-  {actionData?.lastScan && (
-    <div>
-      Last Scan:{" "}
-      <Link to={`/contacts/${actionData?.lastScan.id}`}>
-        {actionData?.lastScan.firstName} {actionData?.lastScan.lastName}
-      </Link>
-    </div>
-  )} 
-*/}
+};
