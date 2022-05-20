@@ -50,7 +50,7 @@ export default function CardsNewRoute() {
           <option value="XXL">XXL</option>
         </select>
       </label>
-      <button type="submit" name="_action" value="create" class="p-2 bg-blue-500 text-white rounded-md">
+      <button type="submit" name="_action" value="create" className="p-2 bg-blue-500 text-white rounded-md">
         Submit
       </button>
     </Form>
