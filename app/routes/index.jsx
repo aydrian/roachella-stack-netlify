@@ -12,21 +12,28 @@ export const loader = async () => {
     }
   });
 
-  if (myCard.githubUsername.length > 0) {
-    const octokit = new Octokit({
-      auth: process.env.GITHUB_ACCESS_TOKEN
-    });
+  if (myCard) {
+    if (myCard.githubUsername.length > 0) {
+      const octokit = new Octokit({
+        auth: process.env.GITHUB_ACCESS_TOKEN
+      });
 
-    const { data } = await octokit.request(`/users/${myCard.githubUsername}`);
+      const { data } = await octokit.request(`/users/${myCard.githubUsername}`);
+
+      return {
+        card: { ...myCard, ...data }
+      }
+    };
 
     return {
-      card: { ...myCard, ...data }
-    }
-  };
+      card: myCard
+    };
+  }
 
   return {
-    card: myCard
-  };
+    card: null
+  }
+
 };
 
 
@@ -36,7 +43,7 @@ export default function Index() {
   return (
     <Layout>
       {card ? (
-        <Card person={card} />
+        <Card details={card} />
       ) : (
         <div>
           <Link to="/cards/new">Create your card</Link>
