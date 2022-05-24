@@ -1,3 +1,4 @@
+const { execSync } = require("child_process");
 const fs = require("fs/promises");
 const path = require("path");
 const inquirer = require("inquirer");
@@ -72,6 +73,8 @@ async function main({ rootDirectory }) {
     // fs.writeFile(README_PATH, newReadme),
     fs.writeFile(PACKAGE_JSON_PATH, newPackageJson)
   ]);
+
+  execSync(`npx prisma migrate dev --name init`, { stdio: "inherit", cwd: rootDirectory });
 
   console.log(
     `
