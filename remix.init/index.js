@@ -74,17 +74,15 @@ async function main({ rootDirectory }) {
     fs.writeFile(PACKAGE_JSON_PATH, newPackageJson)
   ]);
 
+  console.log("Running prisma migrate to create the schema")
+
   execSync(`npx prisma migrate dev --name init`, { stdio: "inherit", cwd: rootDirectory });
 
   console.log(
     `
-Setup is almost complete. Follow these steps to finish initialization:
-- Run Prisma migrate to create the schema
-  npx prisma migrate dev --name init
-- Run the first build (this generates the server you will run):
-  npm run build
-- You're now ready to rock and roll 🤘
-  npm run dev
+    Success! Your app is ready to go.
+    To get started, run:
+    npm run dev
     `.trim()
   );
 }
