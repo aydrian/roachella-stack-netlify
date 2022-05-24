@@ -1,4 +1,4 @@
-import styles from './styles/app.css';
+import styles from "./styles/app.css";
 
 import {
   Links,
@@ -6,17 +6,17 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration,
+  ScrollRestoration
 } from "@remix-run/react";
 
 export const meta = () => ({
   charset: "utf-8",
-  title: "New Remix App",
-  viewport: "width=device-width,initial-scale=1",
+  title: "Roachella Stack",
+  viewport: "width=device-width,initial-scale=1"
 });
 
 export function links() {
-  return [{ rel: "stylesheet", href: styles }]
+  return [{ rel: "stylesheet", href: styles }];
 }
 
 export default function App() {
