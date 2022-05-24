@@ -1,6 +1,12 @@
 const fs = require("fs/promises");
 const path = require("path");
 const inquirer = require("inquirer");
+const crypto = require("crypto");
+const sort = require("sort-package-json");
+
+function getRandomString(length) {
+  return crypto.randomBytes(length).toString("hex");
+}
 
 // The initialization script for your project after
 // you've installed.
@@ -41,19 +47,10 @@ async function main({ rootDirectory }) {
   ]);
 
   // Create a new env file with all the necessary keys.
-  // This will create a new key to give you a new session key
-  // You will want to be sure to add your own credentials
-  // as well.
   const newEnv = env.replace(
     /^DATABASE_URL=.*$/m,
     `DATABASE_URL="${answers.databaseUrl}"`
   );
-
-  // Parse the README and replace the name with our app name
-  // const newReadme = readme.replace(
-  //   new RegExp(escapeRegExp(REPLACER), "g"),
-  //   APP_NAME
-  // );
 
   // Parse the package file and rename the application name
   const newPackageJson =
