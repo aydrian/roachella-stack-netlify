@@ -3,7 +3,7 @@ import { redirect } from "@remix-run/node";
 import { db } from "~/utils/db.server";
 
 import QRCode from "qrcode";
-import FormInput from '~/components/FormInput';
+import FormInput from "~/components/FormInput";
 
 export const action = async ({ request }) => {
   const form = await request.formData();
@@ -42,15 +42,30 @@ export default function CardsNewRoute() {
       <label className="flex flex-col">
         Shirt Size:
         <select className="p-2 rounded-md mt-2" name="shirtSize">
-          <option value="XS">Extra Small</option>
-          <option value="S">Small</option>
-          <option value="M">Medium</option>
-          <option value="LG">Large</option>
-          <option value="XL">Extra Large</option>
-          <option value="XXL">XXL</option>
+          <optgroup label="Regular">
+            <option value="XS">XS</option>
+            <option value="S">Small</option>
+            <option value="M">Medium</option>
+            <option value="LG">Large</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+          </optgroup>
+          <optgroup label="Fitted">
+            <option value="XS">Fitted XS</option>
+            <option value="F-S">Fitted Small</option>
+            <option value="F-M">Fitted Medium</option>
+            <option value="F-LG">Fitted Large</option>
+            <option value="F-XL">Fitted XL</option>
+            <option value="F-XXL">Fitted XXL</option>
+          </optgroup>
         </select>
       </label>
-      <button type="submit" name="_action" value="create" className="p-2 bg-blue-500 text-white rounded-md">
+      <button
+        type="submit"
+        name="_action"
+        value="create"
+        className="p-2 bg-blue-500 text-white rounded-md"
+      >
         Submit
       </button>
     </Form>

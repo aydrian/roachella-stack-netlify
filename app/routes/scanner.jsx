@@ -1,4 +1,10 @@
-import { Form, useSearchParams, useActionData, useTransition, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  useSearchParams,
+  useActionData,
+  useTransition,
+  useLoaderData
+} from "@remix-run/react";
 import { QrReader } from "react-qr-reader";
 import { db } from "~/utils/db.server";
 
@@ -19,7 +25,6 @@ export const action = async ({ request }) => {
     data: { firstName, lastName, githubUsername, shirtSize, notes }
   });
 
-
   return { lastScan: contact };
 };
 
@@ -28,24 +33,22 @@ export async function loader({ request }) {
 
   if (url.searchParams.has("githubUsername")) {
     const githubUsername = url.searchParams.get("githubUsername");
-
     const octokit = new Octokit();
 
     const { data } = await octokit.request(`/users/${githubUsername}`);
 
     return {
       contact: data
-    }
+    };
   }
 
-  return {}
+  return {};
 }
-
 
 export default function ScannerRoute() {
   const [, setSearchParams] = useSearchParams();
 
-  const { contact } = useLoaderData()
+  const { contact } = useLoaderData();
   const actionData = useActionData();
   const transition = useTransition();
   const [data, setData] = React.useState();
@@ -60,15 +63,17 @@ export default function ScannerRoute() {
     }
   }, [isSaving]);
 
-  console.log(data)
-
   return (
     <Layout>
       <div className="flex flex-col items-center">
         <h1 className="text-xl mb-10">Scanner</h1>
         {data ? (
           <>
-            <Form method="POST" className="flex flex-col space-y-3 w-72 items-center justify-center space-around border-2 border-sky-200 rounded-lg p-4" replace>
+            <Form
+              method="POST"
+              className="flex flex-col space-y-3 w-72 items-center justify-center space-around border-2 border-sky-200 rounded-lg p-4"
+              replace
+            >
               <input type="hidden" name="firstName" value={data.firstName} />
               <input type="hidden" name="lastName" value={data.lastName} />
               <input
@@ -77,7 +82,11 @@ export default function ScannerRoute() {
                 value={data.githubUsername}
               />
               <input type="hidden" name="shirtSize" value={data.shirtSize} />
-              <img src={contact.avatar_url} alt="Github Avatar" className="rounded-full h-16 w-16 border-1 border-2 border-sky-500" />
+              <img
+                src={contact.avatar_url}
+                alt="Github Avatar"
+                className="rounded-full h-16 w-16 border-1 border-2 border-sky-500"
+              />
               <p>
                 {data.firstName} {data.lastName}
                 <br />
@@ -87,18 +96,31 @@ export default function ScannerRoute() {
               </p>
               <label className="flex flex-col w-full">
                 Notes:
-                <textarea className="border-2 border-black rounded-md" name="notes"></textarea>
+                <textarea
+                  className="border-2 border-black rounded-md"
+                  name="notes"
+                ></textarea>
               </label>
-              <button className="rounded-lg w-full bg-blue-400 text-white p-3 mx-2" type="submit" name="_action" value="save">
+              <button
+                className="rounded-lg w-full bg-blue-400 text-white p-3 mx-2"
+                type="submit"
+                name="_action"
+                value="save"
+              >
                 Save
               </button>
-              <button className="rounded-lg w-full bg-yellow-400 p-3" type="button" onClick={() => setData(null)}>
+              <button
+                className="rounded-lg w-full bg-yellow-400 p-3"
+                type="button"
+                onClick={() => setData(null)}
+              >
                 Scan again
               </button>
             </Form>
           </>
         ) : (
           <QrReader
+            constraints={{ facingMode: "environment" }}
             onResult={(result, error) => {
               if (!!result) {
                 try {
@@ -118,11 +140,11 @@ export default function ScannerRoute() {
             }}
             className="w-60"
             videoStyle={{
-              boxShadow: "0 0 10px rgba(0,0,0,0.5)",
+              boxShadow: "0 0 10px rgba(0,0,0,0.5)"
             }}
           />
         )}
       </div>
-    </Layout >
+    </Layout>
   );
-};
+}
