@@ -16,14 +16,14 @@ function getRandomString(length) {
 // - Replace our template name for your given app name in the README
 // - Replace our template name for your given app name in the package.json
 // - Prompt for the CockroachDB general connection string
+// - Prompt for the Github Access Token
 // - Add a new .env file for you to use based upon the example file
+// - Run prisma migrate for you
+// - Build your app
 async function main({ rootDirectory }) {
   const EXAMPLE_ENV_PATH = path.join(rootDirectory, ".env.sample");
   const ENV_PATH = path.join(rootDirectory, ".env");
-  // const README_PATH = path.join(rootDirectory, "README.md");
   const PACKAGE_JSON_PATH = path.join(rootDirectory, "package.json");
-
-  const REPLACER = "roachella-stack-template";
 
   const DIR_NAME = path.basename(rootDirectory);
   const SUFFIX = getRandomString(2);
@@ -78,11 +78,13 @@ async function main({ rootDirectory }) {
 
   execSync(`npx prisma migrate dev --name init`, { stdio: "inherit", cwd: rootDirectory });
 
+  execSync(`npm run build`, { stdio: "inherit", cwd: rootDirectory });
+
   console.log(
     `
     Success! Your app is ready to go.
     To get started, run:
-    npm run dev
+    npm run start
     `.trim()
   );
 }

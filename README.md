@@ -4,51 +4,56 @@
 
 - [Remix Docs](https://remix.run/docs)
 
-## Netlify Setup
+## What is in this stack?
+- Netlify
+- CockroachDB
+- Prisma
+- Tailwind
 
-1. Install the [Netlify CLI](https://www.netlify.com/products/dev/):
+---
 
-```sh
-npm i -g netlify-cli
-```
+## Setup CockroachDB 
 
-If you have previously installed the Netlify CLI, you should update it to the latest version:
+Setting up Cockroach DB:
 
-```sh
-npm i -g netlify-cli@latest
-```
+- Create your account at https://cockroachlabs.cloud/
 
-2. Sign up and log in to Netlify:
+- Create a new cluster
+  - Plan: Serverless
+  - Cloud Provider: AWS Cloud
+  - Leave evertything else as default
 
-```sh
-netlify login
-```
+- Create a new SQL user + save the generated password somewhere safe for later then press "Next"
 
-3. Create a new site:
+- Copy and run the command in your terminal to download the cert 
 
-```sh
-netlify init
-```
+- Copy the general connection string and save it somewhere safe for later then press "Close"
 
+- install cockroach-cli (on mac) 
+`brew install cockroachdb/tap/cockroach`
+
+- run 
+`cockroach sql --url "{DB_CONNECTION_STRING}&sslrootcert=$HOME/.postgresql/root.crt"`
+
+- create your database 
+`create database {APPLICATION_NAME};`
+
+---
+
+## Create a Github Access Token
+
+Follow the instructions at https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+
+(You'll only need to check `read:user` under the `user` scope for this key)
+
+
+---
 ## Development
 
-The Netlify CLI starts your app in development mode, rebuilding assets on file changes.
+Once you've completed the above steps and have your `Github Access Key` and your `DB connection string` we can get started with creating your project from this stack.
 
-```sh
-npm run dev
-```
+In your terminal run:
+`npx create-remix --template https://github.com/aydrian/roachella-stack`
 
-Open up [http://localhost:3000](http://localhost:3000), and you should be ready to go!
-
-## Deployment
-
-There are two ways to deploy your app to Netlify, you can either link your app to your git repo and have it auto deploy changes to Netlify, or you can deploy your app manually. If you've followed the setup instructions already, all you need to do is run this:
-
-```sh
-npm run build
-# preview deployment
-netlify deploy
-
-# production deployment
-netlify deploy --prod
-```
+Once you've succesfully completed the prompts, your project should be ready to run with:
+`npm run start`
