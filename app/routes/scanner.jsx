@@ -28,10 +28,11 @@ export const action = async ({ request }) => {
   return { lastScan: contact };
 };
 
-export async function loader({ params }) {
-  const { githubUsername } = params;
+export async function loader({ request }) {
+  const url = new URL(request.url);
 
-  if (githubUsername) {
+  if (url.searchParams.has("githubUsername")) {
+    const githubUsername = url.searchParams.get("githubUsername");
     const octokit = new Octokit();
 
     const { data } = await octokit.request(`/users/${githubUsername}`);
