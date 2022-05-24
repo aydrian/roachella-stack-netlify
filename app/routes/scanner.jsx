@@ -63,8 +63,6 @@ export default function ScannerRoute() {
     }
   }, [isSaving]);
 
-  console.log(data);
-
   return (
     <Layout>
       <div className="flex flex-col items-center">
