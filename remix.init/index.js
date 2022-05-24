@@ -55,7 +55,9 @@ async function main({ rootDirectory }) {
   // Create a new env file with all the necessary keys.
   const newEnv = env.replace(
     /^DATABASE_URL=.*$/m, `DATABASE_URL="${answers.databaseUrl}"`
-  );
+  ).replace(
+    /^GITHUB_ACCESS_KEY=.*$/m, `GITHUB_ACCESS_KEY="${answers.githubAccessKey}"`
+  )
 
   // Parse the package file and rename the application name
   const newPackageJson =
