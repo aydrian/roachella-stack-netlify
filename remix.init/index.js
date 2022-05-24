@@ -30,23 +30,28 @@ async function main({ rootDirectory }) {
     fs.readFile(PACKAGE_JSON_PATH, "utf-8")
   ]);
 
-  // Prompt for DATABASE_URL
+  // Prompt for DATABASE_URL & GITHUB_ACCESS_KEY
   const answers = await inquirer.prompt([
     {
       name: "databaseUrl",
       default: "",
       message:
         "What is the general connection String for your CockroachDB database?"
+    },
+    {
+      name: "githubAccessKey",
+      default: "",
+      message: "What is your GitHub access key? (this key will only need read permissions for users)"
     }
   ]);
+
 
   // Create a new env file with all the necessary keys.
   // This will create a new key to give you a new session key
   // You will want to be sure to add your own credentials
   // as well.
   const newEnv = env.replace(
-    /^DATABASE_URL=.*$/m,
-    `DATABASE_URL="${answers.databaseUrl}"`
+    /^DATABASE_URL=.*$/m, `DATABASE_URL="${answers.databaseUrl}"`
   );
 
   // Parse the README and replace the name with our app name
